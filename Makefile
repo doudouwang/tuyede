@@ -1,5 +1,5 @@
 clean:
-	ls | grep -v WebContent | xargs rm
+	ls | grep -v WebContent | xargs rm -rfv
 all: clean
 	mv WebContent/* .
-	rm -rf WebContent
+	rm -rfv WebContent
