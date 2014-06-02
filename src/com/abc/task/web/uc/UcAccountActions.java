@@ -1,5 +1,8 @@
 package com.abc.task.web.uc;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,10 +11,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,12 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.abc.task.annotation.LoginMember;
 import com.abc.task.annotation.RequiredLogin;
 import com.abc.task.annotation.ResultTypeEnum;
+import com.abc.task.enums.WealthType;
 import com.abc.task.service.AccountService;
 import com.abc.task.vo.Member;
 
 @Controller
 public class UcAccountActions {
-	private static final Log log = LogFactory.getLog(UcAccountActions.class);
 	@Resource
 	private AccountService uCAccountService;
 
@@ -88,5 +92,29 @@ public class UcAccountActions {
 	public int memberScoreLogDelay(HttpServletRequest request,
 			HttpServletResponse response, @LoginMember Member loginMember) {
 		return uCAccountService.delayScoreLogCount(loginMember.getId());
+	}
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		binder.registerCustomEditor(Date.class,new CustomDateEditor(format, true));
+		binder.registerCustomEditor(Date.class,new CustomDateEditor(format, true));
+	}
+	@ResponseBody
+	@RequestMapping("/taskrecentlist.action")
+	public List<Map<String, Object>> recentList(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "c",required = false,defaultValue="5") int c,
+			@RequestParam(value = "t",required = false) WealthType t,
+			@RequestParam(value = "b",required = false) Date begin,
+			@RequestParam(value = "e",required = false) Date end){
+		return uCAccountService.accountPeriodList(c, t, begin, end);
+	}
+	@ResponseBody
+	@RequestMapping("/taskrecentlogs.action")
+	public List<Map<String, Object>> recentLogs(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "c",required = false,defaultValue="5") int c,
+			@RequestParam(value = "t",required = false) WealthType t,
+			@RequestParam(value = "b",required = false) Date begin,
+			@RequestParam(value = "e",required = false) Date end){
+		return uCAccountService.accountPeriodLogs(c, t, begin, end);
 	}
 }

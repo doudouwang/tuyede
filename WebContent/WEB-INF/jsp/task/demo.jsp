@@ -4,6 +4,6 @@
 <head>
 </head>
 <body>
-<a href="http://www.task.com/processor.action?itemId=1">签到</a>
+<a href="http://www.tuyede.com/processor.action?itemId=1">签到</a>
 </body>
 </html>

@@ -593,3 +593,57 @@ $.fn.extend({page:function(o){
 		$(ele).on("click",{p:this.id,per:per,page_id:o.page_id,url:o.url,showlist:o.showlist,params:o.params,t:o.t},load);
 	});
 }});
+function ad_show(id){
+		$.ajax({
+			url : J_task.Config.website+"ad.action",
+			type : "POST",
+			dataType : "JSON",
+			jsonp : "jsoncallback",
+			async:false,
+			data : {'id':id},
+			success : function(ad) {
+				document.open();
+				if(!ad.tpl){
+					document.write(ad.content);
+					document.close();
+					return;
+				}
+				var $div = $("<div></div>");
+						$div.attr("id",'t_ad_div_' + ad.id);
+						$div.css("width",ad.width);
+						$div.css("height",ad.height);
+				if(ad.closeable){
+					var $close = $("<div></div>");
+							$close.css('width','19px');
+							$close.css('height','19px');
+							$close.css('position','absolute');
+					var $a = $("<a></a>");
+							$a.attr('href','javascript:void(0);');
+							$a.click($div.hide());
+							$a.css('width','19px');
+							$a.css('height','19px');
+							$a.css('display','19px');
+							$a.css('cursor','pointer');
+							$a.css('background','url(http://ad.egou.com/adt/images/spe.gif) no-repeat left -62px');
+					$close.append($a);
+					$div.append($close);
+				}
+				var $iframe = $("<iframe></iframe>");
+						$iframe.attr('id','t_iframe_'+ ad.id);
+						$iframe.css("width",ad.width);
+						$iframe.css("height",ad.height);
+						$iframe.attr("scrolling",'no');
+						$iframe.attr("frameborder",0);
+						$iframe.attr("marginwidth",0);
+						$iframe.attr("marginheight",0);
+						$iframe.attr("src",J_task.Config.website+'adshow.htm?id='+ad.id);
+				$div.append($iframe);
+				document.write($div.html());
+				document.close();
+			},
+			error : function(xhr, ts, et) {
+				xhr = null;
+				J_task.log(et);
+			}
+		});
+};

@@ -50,86 +50,27 @@
     	<div class="guanggao_bg">
         	<div class="xiangsi_name font16">相似任务</div>
         	<div class="xiangsi_list">
-            	<ul>
-                	<li>	
-                    	<b><a href="#"><img src="images/demoing/pic_1.jpg" /></a></b>
-                        <span>
-                        <p class="title"><a href="#">支付宝派豪礼，签到支付宝派豪礼</a></p>
-                        <p class="color_99">可赚：<strong class="color_hs"><em class="number">30-4050</em>个</strong></p>
-                        <p class="color_99">201281人关注</p>
-                        </span>
-                    </li>
-                	<li>	
-                    	<b><a href="#"><img src="images/demoing/pic_1.jpg" /></a></b>
-                        <span>
-                        <p class="title"><a href="#">支付宝派豪礼，签到支付宝派豪礼</a></p>
-                        <p class="color_99">可赚：<strong class="color_hs"><em class="number">30-4050</em>个</strong></p>
-                        <p class="color_99">201281人关注</p>
-                        </span>
-                    </li>
-                	<li>	
-                    	<b><a href="#"><img src="images/demoing/pic_1.jpg" /></a></b>
-                        <span>
-                        <p class="title"><a href="#">支付宝派豪礼，签到支付宝派豪礼</a></p>
-                        <p class="color_99">可赚：<strong class="color_hs"><em class="number">30-4050</em>个</strong></p>
-                        <p class="color_99">201281人关注</p>
-                        </span>
-                    </li>
-                	<li>	
-                    	<b><a href="#"><img src="images/demoing/pic_1.jpg" /></a></b>
-                        <span>
-                        <p class="title"><a href="#">支付宝派豪礼，签到支付宝派豪礼</a></p>
-                        <p class="color_99">可赚：<strong class="color_hs"><em class="number">30-4050</em>个</strong></p>
-                        <p class="color_99">201281人关注</p>
-                        </span>
-                    </li>
-                	<li>	
-                    	<b><a href="#"><img src="images/demoing/pic_1.jpg" /></a></b>
-                        <span>
-                        <p class="title"><a href="#">支付宝派豪礼，签到支付宝派豪礼</a></p>
-                        <p class="color_99">可赚：<strong class="color_hs"><em class="number">30-4050</em>个</strong></p>
-                        <p class="color_99">201281人关注</p>
-                        </span>
-                    </li>
+            	<ul id="tasklist">
                 </ul>
             </div>
         </div>
+        <!--  积分赚取榜  -->
         <div class="guanggao_bg">
         	<div class="guanggao_name font16">积分赚取榜</div>
             <div class="jifen_name">
             	<ul>
-                	<li><a class="hover" id="one1" onmousemove="zahe_1('one',1,2)">今日</a></li>
-                	<li class="next"><a id="one2" onmousemove="zahe_1('one',2,2)">昨日</a></li>
+                	<li><a class="hover" id="one1">今日</a></li>
+                	<li class="next"><a id="one2">昨日</a></li>
                 </ul>
             </div>
         	<div class="jifen_list" id="con_one_1">
-            	<ul>
-                	<li><span>1</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>2</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>3</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>4</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>5</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>6</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>7</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>8</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>9</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>10</span><strong>64687484</strong><p>65,8956,00</p></li>
+            	<ul id="todayList">
                 </ul>
                 <div class="clear"></div>
             </div>
             <div class="jifen_list display_none" id="con_one_2">
-            	<ul>
-                	<li><span>1</span><strong>777777</strong><p>65,8956,00</p></li>
-                	<li><span>2</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>3</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>4</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>5</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>6</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>7</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>8</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>9</span><strong>64687484</strong><p>65,8956,00</p></li>
-                	<li><span>10</span><strong>64687484</strong><p>65,8956,00</p></li>
-                </ul> 
+            	<ul id="yesterdayList">
+                </ul>
                 <div class="clear"></div>
             </div>
         </div>
@@ -137,5 +78,6 @@
     <div class="clear"></div>
 </div>
 <%@ include file="../foot.jsp" %>
+<script src="/js/view.js" type="text/javascript"></script>
 </body>
 </html>

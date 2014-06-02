@@ -27,7 +27,7 @@ public class Ucenter {
 	private Map<String, String> config;
 
 	@RequestMapping("/ucenter/info.htm")
-	@RequiredLogin()
+	@RequiredLogin
 	public String info(HttpServletRequest request,
 			HttpServletResponse response, @LoginMember Member m) {
 		request.setAttribute("user", m);

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<center><script type="text/javascript">ad_show('3');</script></center>
 <div class="bottom_bg">
 	<div class="bottom">
     	<p class="word"><a href="#">关于盛大集团</a> <span>|</span> <a href="#">商务合作</a> <span>|</span> <a href="#">盛大招聘</a> <span>|</span> <a href="#">客服中心</a> <span>|</span> <a href="#">放心搜</a> <span>|</span> <a href="#">盛大手机</a></p>

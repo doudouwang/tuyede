@@ -1,26 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="com.abc.task.vo.Member,java.util.HashMap,java.util.Map,org.codehaus.jackson.map.ObjectMapper"%>
-<%@page import="com.abc.task.lang.CookieUtils,com.abc.task.coder.DESCoder"%>
-<%@page import="org.springframework.web.context.WebApplicationContext" %>
-<%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
-<%
-	WebApplicationContext wac=WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-	ObjectMapper objectMapper = (ObjectMapper)wac.getBean("objectMapper");
-	Map<String,String> c = (Map)wac.getBean("config");
-	String loginuser_b64 = CookieUtils.readCookie(request, "user");
-	Member loginUser = null;
-	if(loginuser_b64!=null && c!=null){
-		String charset = c.get("charset");
-		String key = c.get("cookie_key");
-		try{
-			byte[] loginuser_c = DESCoder.decryptBASE64(loginuser_b64.getBytes(charset));
-			byte[] loginuser = DESCoder.decrypt(loginuser_c, key.getBytes(charset));
-			loginUser = objectMapper.readValue(loginuser, Member.class);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-%>
 <div class="top_bg">
 	<div id="msg_top" ></div>
 	<form>

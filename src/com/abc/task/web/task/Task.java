@@ -16,7 +16,7 @@ import com.abc.task.service.TaskService;
 import com.abc.task.vo.TaskItem;
 
 @Controller
-public class TaskView {
+public class Task {
 	@Resource
 	private TaskService taskService;
 	@Resource

@@ -1,3 +1,10 @@
 /spring.core.xml
 /qqconnectconfig.properties
 /log4j.properties
+/.gitignore
+/com
+/DESCoderTest.class
+/ParamsMatch.class
+/RedirectStrategyManul.class
+/TaobaoLoginTest.class
+/TestGenerator.class

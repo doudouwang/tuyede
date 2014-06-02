@@ -1,6 +1,7 @@
 package com.abc.task.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,13 @@ public class AccountService {
 					+ "mc_wealth,serial_number,sub_serial_number,"
 					+ "create_time,status,delay_hours,remark,operator) "
 					+ "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ls);
+			jdbcTemplateUc.batchUpdate("INSERT INTO account_log_period("
+					+ "member_id,member_name,merchant_id,"
+					+ "merchant_name,mc_account_id,wealth_type,"
+					+ "mc_account,uc_account,uc_wealth,"
+					+ "mc_wealth,serial_number,sub_serial_number,"
+					+ "create_time,status,delay_hours,remark,operator) "
+					+ "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ls);
 		} catch (Exception e) {
 			throw new DataBaseException(e);
 		}
@@ -80,8 +88,8 @@ public class AccountService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> scoreLogs(int page,int rowCount,int itemId, int memberId,
-			Date begin, Date end) {
+	public List<Map<String, Object>> scoreLogs(int page, int rowCount,
+			int itemId, int memberId, Date begin, Date end) {
 		if (rowCount <= 0 || page <= 0) {
 			throw new ParameterException("rowcount or page must be big than 0!");
 		}
@@ -102,7 +110,7 @@ public class AccountService {
 			l.add(end);
 		}
 		sql.append(" limit ").append((page - 1) * rowCount).append(",")
-		.append(rowCount);
+				.append(rowCount);
 		try {
 			return jdbcTemplateUc.queryForList(sql.toString(), l.toArray());
 		} catch (DataAccessException e) {
@@ -110,9 +118,8 @@ public class AccountService {
 			return ListUtils.EMPTY_LIST;
 		}
 	}
-	
-	public int scoreLogCount(int itemId, int memberId,
-			Date begin, Date end) {
+
+	public int scoreLogCount(int itemId, int memberId, Date begin, Date end) {
 		StringBuilder sb = new StringBuilder(100);
 		sb.append("select count(*) from uc_account_log where member_id = ? ");
 		List<Object> l = new ArrayList<Object>(3);
@@ -136,25 +143,29 @@ public class AccountService {
 			return 0;
 		}
 	}
-	
+
 	public int userDelayScore(int memberId) {
 		try {
-			return jdbcTemplateUc.queryForInt(
-					"select sum(wealth) from uc_delay_account_log where member_id = ?", memberId);
+			return jdbcTemplateUc
+					.queryForInt(
+							"select sum(wealth) from uc_delay_account_log where member_id = ?",
+							memberId);
 		} catch (DataAccessException e) {
 			log.error(e, e);
 			return 0;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> delayScoreLogs(int page,int rowCount,int memberId) {
+	public List<Map<String, Object>> delayScoreLogs(int page, int rowCount,
+			int memberId) {
 		if (rowCount <= 0 || page <= 0) {
 			throw new ParameterException("rowcount or page must be big than 0!");
 		}
-		StringBuilder sql = new StringBuilder("select * from uc_delay_account_log where member_id = ? order by sub_serial_number");
+		StringBuilder sql = new StringBuilder(
+				"select * from uc_delay_account_log where member_id = ? order by sub_serial_number");
 		sql.append(" limit ").append((page - 1) * rowCount).append(",")
-		.append(rowCount);
+				.append(rowCount);
 		try {
 			return jdbcTemplateUc.queryForList(sql.toString(), memberId);
 		} catch (DataAccessException e) {
@@ -162,13 +173,45 @@ public class AccountService {
 			return ListUtils.EMPTY_LIST;
 		}
 	}
-	
+
 	public int delayScoreLogCount(int memberId) {
 		try {
-			return jdbcTemplateUc.queryForInt("select count(*) from uc_delay_account_log where member_id = ?", memberId);
+			return jdbcTemplateUc
+					.queryForInt(
+							"select count(*) from uc_delay_account_log where member_id = ?",
+							memberId);
 		} catch (DataAccessException e) {
 			log.error(e, e);
 			return 0;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> accountPeriodList(int count,
+			WealthType type, Date begin, Date end) {
+		String sql = "select member_name name,sum(uc_wealth) wealth from account_log_period where wealth_type = ? and create_time >= ? and create_time < ? group by member_name order by sum(uc_wealth) desc limit 0, ?";
+		try {
+			Calendar c = Calendar.getInstance();
+			c.setTime(end);
+			c.add(Calendar.DAY_OF_MONTH, +1);
+			return jdbcTemplateUc.queryForList(sql,type.name(),begin,c.getTime(),count);
+		} catch (DataAccessException e) {
+			log.error(e, e);
+			return ListUtils.EMPTY_LIST;
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> accountPeriodLogs(int count,
+			WealthType type, Date begin, Date end) {
+		String sql = "select member_name name,uc_wealth wealth from account_log_period where wealth_type = ? and create_time >= ? and create_time < ?  order by create_time desc limit 0, ?";
+		try {
+			Calendar c = Calendar.getInstance();
+			c.setTime(end);
+			c.add(Calendar.DAY_OF_MONTH, +1);
+			return jdbcTemplateUc.queryForList(sql,type.name(),begin,c.getTime(),count);
+		} catch (DataAccessException e) {
+			log.error(e, e);
+			return ListUtils.EMPTY_LIST;
 		}
 	}
 }

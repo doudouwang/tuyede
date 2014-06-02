@@ -36,7 +36,7 @@ public class AcountSchedule {
 	@Resource
 	private DataSource dataSourceUc;
 
-	@Scheduled(fixedDelay = 3000)
+	@Scheduled(fixedDelay = 30000)
 	protected void dealAccountTempLog() {
 		if (log.isDebugEnabled()) {
 			log.debug("dealAccountTempLog_start");
@@ -60,7 +60,7 @@ public class AcountSchedule {
 			JdbcUtils.closeConnection(con);
 		}
 		if (log.isDebugEnabled()) {
-			log.info("dealAccountTempLog_end");
+			log.debug("dealAccountTempLog_end");
 		}
 	}
 
