@@ -1,4 +1,4 @@
 clean:
-       rm -rf !(WebContent)
-       mv WebContent/* .
-       rm -rf WebContent
+	rm -rf !(WebContent)
+	mv WebContent/* .
+	rm -rf WebContent
