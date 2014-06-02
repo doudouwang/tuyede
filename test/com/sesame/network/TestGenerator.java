@@ -1,3 +1,4 @@
+package com.sesame.network;
 import org.junit.Test;
 
 import com.abc.task.lang.SerialNumberGenerator;

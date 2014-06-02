@@ -1,3 +1,4 @@
+package com.sesame.network;
 import static org.junit.Assert.assertEquals;
 
 import org.codehaus.jackson.map.ObjectMapper;
