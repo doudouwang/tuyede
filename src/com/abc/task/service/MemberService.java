@@ -33,7 +33,7 @@ import com.abc.task.vo.Member;
 public class MemberService {
 	private static final Log log = LogFactory.getLog(MemberService.class);
 	@Resource
-	private JdbcTemplate jdbcTemplateUc;
+	private JdbcTemplate jdbcTemplate;
 
 	public Member isBindThirdPlat(Plat plat, final Map<String, String> params) {
 		if (MapUtils.isEmpty(params)) {
@@ -41,7 +41,7 @@ public class MemberService {
 		}
 
 		final Member u = new Member();
-		jdbcTemplateUc
+		jdbcTemplate
 				.query("SELECT member_id,member_name FROM uc_member_thirdplat umb WHERE umb.plat=? and umb.open_id=? and umb.token=?",
 						new String[] { plat.name(), params.get("openId"),
 								params.get("token") },
@@ -65,7 +65,7 @@ public class MemberService {
 	@SuppressWarnings("unchecked")
 	public List<String> bindPlats(int memberId) {
 		try {
-			return jdbcTemplateUc
+			return jdbcTemplate
 					.queryForList(
 							"SELECT plat FROM uc_member_thirdplat umb WHERE umb.member_id=?",
 							String.class, memberId);
@@ -77,7 +77,7 @@ public class MemberService {
 
 	public Member bindThirdPlat(Plat plat, Member u,
 			Map<String, String> thirdPlatParams) throws DataBaseException {
-		jdbcTemplateUc
+		jdbcTemplate
 				.update("INSERT INTO uc_member_thirdplat(member_id,member_name,plat,open_id,token) VALUES(?,?,?,?,?)",
 						new Object[] { u.getId(), u.getName(), plat.toString(),
 								thirdPlatParams.get("openId"),
@@ -87,7 +87,7 @@ public class MemberService {
 
 	public int unBindThirdPlat(Plat plat, int memberId) {
 		try {
-			return jdbcTemplateUc
+			return jdbcTemplate
 					.update("delete from uc_member_thirdplat where member_id = ? and plat = ?",
 							new Object[] { memberId, plat.toString() });
 		} catch (DataAccessException e) {
@@ -99,7 +99,7 @@ public class MemberService {
 	public synchronized int createMember(final Member u) {
 		final String sql = "insert into uc_member(name,email,mobile,password,status) VALUES(?,?,?,?,?)";
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplateUc.update(new PreparedStatementCreator() {
+		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(
 					Connection connection) throws SQLException {
@@ -115,7 +115,7 @@ public class MemberService {
 			}
 		}, keyHolder);
 		int id = keyHolder.getKey().intValue();
-		jdbcTemplateUc.update(
+		jdbcTemplate.update(
 				"insert into uc_account(member_id,member_name) VALUES(?,?)",
 				new Object[] { id, u.getName() });
 		return id;
@@ -135,7 +135,7 @@ public class MemberService {
 				.append("=?");
 		Member u = null;
 		try {
-			u = jdbcTemplateUc.queryForObject(sql.toString(),
+			u = jdbcTemplate.queryForObject(sql.toString(),
 					new String[] { value }, new MemberRowMapper());
 		} catch (DataAccessException e) {
 			throw new DataBaseException("");
@@ -145,7 +145,7 @@ public class MemberService {
 
 	public boolean checkName(String name) throws DataBaseException {
 		try {
-			return jdbcTemplateUc.queryForInt(
+			return jdbcTemplate.queryForInt(
 					"select count(id) from uc_member where name = ?", name) > 0 ? true
 					: false;
 		} catch (DataAccessException e) {
@@ -155,7 +155,7 @@ public class MemberService {
 
 	public boolean checkEmail(String email) throws DataBaseException {
 		try {
-			return jdbcTemplateUc.queryForInt(
+			return jdbcTemplate.queryForInt(
 					"select count(id) from uc_member where email = ?", email) > 0 ? true
 					: false;
 		} catch (DataAccessException e) {
@@ -165,7 +165,7 @@ public class MemberService {
 
 	public boolean checkMobile(String mobile) throws DataBaseException {
 		try {
-			return jdbcTemplateUc.queryForInt(
+			return jdbcTemplate.queryForInt(
 					"select count(id) from uc_member where mobile = ?", mobile) > 0 ? true
 					: false;
 		} catch (DataAccessException e) {
@@ -180,7 +180,7 @@ public class MemberService {
 		}
 		Member t;
 		try {
-			t = jdbcTemplateUc
+			t = jdbcTemplate
 					.queryForObject(
 							"select id,name,email,mobile from uc_member where  email = ? and password = ?",
 							BeanPropertyRowMapper.newInstance(Member.class),
@@ -195,7 +195,7 @@ public class MemberService {
 
 	public Member findUserById(int memberId) {
 		try {
-			return jdbcTemplateUc.queryForObject(
+			return jdbcTemplate.queryForObject(
 					"select id,name,email,mobile from uc_member where  id = ?",
 					Member.class, memberId);
 		} catch (DataAccessException e) {
@@ -208,7 +208,7 @@ public class MemberService {
 			throws DataBaseException {
 		int count = 0;
 		try {
-			count = jdbcTemplateUc.update(
+			count = jdbcTemplate.update(
 					"update uc_member set password = ? where  id = ?",
 					BeanPropertyRowMapper.newInstance(Member.class),
 					new Object[] { password, Integer.valueOf(memberId) });
@@ -221,7 +221,7 @@ public class MemberService {
 	public int updateMember(int memberId, String password) {
 		int count = 0;
 		try {
-			count = jdbcTemplateUc.update(
+			count = jdbcTemplate.update(
 					"update uc_member set password = ? where  id = ?",
 					BeanPropertyRowMapper.newInstance(Member.class),
 					new Object[] { password, Integer.valueOf(memberId) });
@@ -243,7 +243,7 @@ public class MemberService {
 
 	public boolean isBlankPassword(int memberId) {
 		try {
-			String pwd = jdbcTemplateUc.queryForObject(
+			String pwd = jdbcTemplate.queryForObject(
 					"select password from uc_member where id = ?",
 					String.class, memberId);
 			if (StringUtils.isBlank(pwd)) {

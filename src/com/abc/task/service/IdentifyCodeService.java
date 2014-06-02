@@ -10,19 +10,19 @@ import com.abc.task.exception.DataBaseException;
 @Service("identifyCodeService")
 public class IdentifyCodeService {
 	@Resource
-	private JdbcTemplate jdbcTemplateUc;
+	private JdbcTemplate jdbcTemplate;
 
 	public int insertCode(String key, String code) throws DataBaseException {
 		try {
-			int count = jdbcTemplateUc.queryForInt(
+			int count = jdbcTemplate.queryForInt(
 					"select count(id) from uc_identify_code where k=?",
 					new Object[] { key });
 			if (count == 0) {
-				return jdbcTemplateUc.update(
+				return jdbcTemplate.update(
 						"insert into uc_identify_code(k,c) values(?,?)",
 						new Object[] { key, code });
 			} else {
-				return jdbcTemplateUc.update(
+				return jdbcTemplate.update(
 						"update uc_identify_code set c=? where k = ?",
 						new Object[] { code, key });
 			}
@@ -33,7 +33,7 @@ public class IdentifyCodeService {
 
 	public boolean selectCode(String key, String code) throws DataBaseException {
 		try {
-			int count = jdbcTemplateUc.queryForInt(
+			int count = jdbcTemplate.queryForInt(
 					"select count(id) from uc_identify_code where k=? and c=?",
 					new Object[] { key, code });
 			if (count == 0) {

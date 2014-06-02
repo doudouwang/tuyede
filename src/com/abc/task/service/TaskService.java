@@ -21,39 +21,39 @@ import com.abc.task.vo.TaskRule;
 @Service("taskService")
 public class TaskService {
 	@Resource
-	private JdbcTemplate jdbcTemplateTask;
+	private JdbcTemplate jdbcTemplate;
 	@Resource
 	ObjectMapper objectMapper;
 
 	public TaskItem getTaskItem(int itemId) {
-		TaskItem t = jdbcTemplateTask.queryForObject(
+		TaskItem t = jdbcTemplate.queryForObject(
 				"select * from task_item where  id = ?",
 				BeanPropertyRowMapper.newInstance(TaskItem.class), itemId);
 		return t;
 	}
 
 	public Map<String, Object> getTaskType(int typeId) {
-		Map<String, Object> t = jdbcTemplateTask.queryForMap(
+		Map<String, Object> t = jdbcTemplate.queryForMap(
 				"select * from task_type where  id = ?", typeId);
 		return t;
 	}
 
 	public TaskFilter getTaskFilter(int filterId) {
-		TaskFilter t = jdbcTemplateTask.queryForObject(
+		TaskFilter t = jdbcTemplate.queryForObject(
 				"select * from task_filter where  id = ?",
 				BeanPropertyRowMapper.newInstance(TaskFilter.class), filterId);
 		return t;
 	}
 
 	public TaskRule getTaskRule(int ruleId) {
-		TaskRule t = jdbcTemplateTask.queryForObject(
+		TaskRule t = jdbcTemplate.queryForObject(
 				"select * from task_rule where  id = ?",
 				BeanPropertyRowMapper.newInstance(TaskRule.class), ruleId);
 		return t;
 	}
 
 	public TaskFilterOption getTaskFilterOption(int optionId) {
-		TaskFilterOption t = jdbcTemplateTask.queryForObject(
+		TaskFilterOption t = jdbcTemplate.queryForObject(
 				"select * from task_filter_option where  id = ?",
 				BeanPropertyRowMapper.newInstance(TaskFilterOption.class),
 				optionId);
@@ -61,7 +61,7 @@ public class TaskService {
 	}
 
 	public List<TaskFilterOption> getTaskFilterOptions(int itemId) {
-		List<Integer> t = jdbcTemplateTask.queryForList(
+		List<Integer> t = jdbcTemplate.queryForList(
 				"select id from task_filter_option where  item_id = ?",
 				Integer.class, itemId);
 		List<TaskFilterOption> r = new ArrayList<TaskFilterOption>(t.size());
@@ -72,7 +72,7 @@ public class TaskService {
 	}
 
 	public List<TaskRule> getTaskRules(int itemId) {
-		List<Integer> t = jdbcTemplateTask.queryForList(
+		List<Integer> t = jdbcTemplate.queryForList(
 				"select id from task_rule where  item_id = ?",
 				Integer.class, itemId);
 		List<TaskRule> r = new ArrayList<TaskRule>(t.size());
@@ -99,7 +99,7 @@ public class TaskService {
 		}
 		sql.append(" limit ").append((page - 1) * rowCount).append(",")
 				.append(rowCount);
-		List<Map<String, Object>> ids = jdbcTemplateTask.queryForList(sql
+		List<Map<String, Object>> ids = jdbcTemplate.queryForList(sql
 				.toString());
 		List<TaskItem> result = new ArrayList<TaskItem>(ids.size());
 		for (Map<String, Object> idMap : ids) {
@@ -108,12 +108,12 @@ public class TaskService {
 		return result;
 	}
 	public int taskCount(){
-		return jdbcTemplateTask.queryForInt("select count(id) from task_item");
+		return jdbcTemplate.queryForInt("select count(id) from task_item");
 	}
 
 	public List<Map<String, Object>> taskTypeList() {
 		StringBuilder sql = new StringBuilder(" select id from task_type ");
-		List<Map<String, Object>> ids = jdbcTemplateTask.queryForList(sql
+		List<Map<String, Object>> ids = jdbcTemplate.queryForList(sql
 				.toString());
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>(
 				ids.size());
@@ -125,7 +125,7 @@ public class TaskService {
 
 	public List<TaskFilter> taskFilters() {
 		StringBuilder sql = new StringBuilder(" select id from task_filter ");
-		List<Map<String, Object>> ids = jdbcTemplateTask.queryForList(sql
+		List<Map<String, Object>> ids = jdbcTemplate.queryForList(sql
 				.toString());
 		List<TaskFilter> result = new ArrayList<TaskFilter>(ids.size());
 		for (Map<String, Object> idMap : ids) {

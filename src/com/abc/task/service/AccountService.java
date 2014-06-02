@@ -28,7 +28,7 @@ import com.abc.task.vo.AccountLog;
 public class AccountService {
 	private static final Log log = LogFactory.getLog(AccountService.class);
 	@Resource
-	private JdbcTemplate jdbcTemplateUc;
+	private JdbcTemplate jdbcTemplate;
 
 	public void insertAccountTmpLog(List<AccountLog> logs)
 			throws DataBaseException {
@@ -57,14 +57,14 @@ public class AccountService {
 					status.name(), delayHours, remark, operator });
 		}
 		try {
-			jdbcTemplateUc.batchUpdate("INSERT INTO account_log_tmp("
+			jdbcTemplate.batchUpdate("INSERT INTO account_log_tmp("
 					+ "member_id,member_name,merchant_id,"
 					+ "merchant_name,mc_account_id,wealth_type,"
 					+ "mc_account,uc_account,uc_wealth,"
 					+ "mc_wealth,serial_number,sub_serial_number,"
 					+ "create_time,status,delay_hours,remark,operator) "
 					+ "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ls);
-			jdbcTemplateUc.batchUpdate("INSERT INTO account_log_period("
+			jdbcTemplate.batchUpdate("INSERT INTO account_log_period("
 					+ "member_id,member_name,merchant_id,"
 					+ "merchant_name,mc_account_id,wealth_type,"
 					+ "mc_account,uc_account,uc_wealth,"
@@ -79,7 +79,7 @@ public class AccountService {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> userScore(int memberId) {
 		try {
-			return jdbcTemplateUc.queryForMap(
+			return jdbcTemplate.queryForMap(
 					"select * from uc_account where member_id = ?", memberId);
 		} catch (DataAccessException e) {
 			log.error(e, e);
@@ -112,7 +112,7 @@ public class AccountService {
 		sql.append(" limit ").append((page - 1) * rowCount).append(",")
 				.append(rowCount);
 		try {
-			return jdbcTemplateUc.queryForList(sql.toString(), l.toArray());
+			return jdbcTemplate.queryForList(sql.toString(), l.toArray());
 		} catch (DataAccessException e) {
 			log.error(e, e);
 			return ListUtils.EMPTY_LIST;
@@ -137,7 +137,7 @@ public class AccountService {
 			l.add(end);
 		}
 		try {
-			return jdbcTemplateUc.queryForInt(sb.toString(), l.toArray());
+			return jdbcTemplate.queryForInt(sb.toString(), l.toArray());
 		} catch (DataAccessException e) {
 			log.error(e, e);
 			return 0;
@@ -146,7 +146,7 @@ public class AccountService {
 
 	public int userDelayScore(int memberId) {
 		try {
-			return jdbcTemplateUc
+			return jdbcTemplate
 					.queryForInt(
 							"select sum(wealth) from uc_delay_account_log where member_id = ?",
 							memberId);
@@ -167,7 +167,7 @@ public class AccountService {
 		sql.append(" limit ").append((page - 1) * rowCount).append(",")
 				.append(rowCount);
 		try {
-			return jdbcTemplateUc.queryForList(sql.toString(), memberId);
+			return jdbcTemplate.queryForList(sql.toString(), memberId);
 		} catch (DataAccessException e) {
 			log.error(e, e);
 			return ListUtils.EMPTY_LIST;
@@ -176,7 +176,7 @@ public class AccountService {
 
 	public int delayScoreLogCount(int memberId) {
 		try {
-			return jdbcTemplateUc
+			return jdbcTemplate
 					.queryForInt(
 							"select count(*) from uc_delay_account_log where member_id = ?",
 							memberId);
@@ -194,7 +194,7 @@ public class AccountService {
 			Calendar c = Calendar.getInstance();
 			c.setTime(end);
 			c.add(Calendar.DAY_OF_MONTH, +1);
-			return jdbcTemplateUc.queryForList(sql,type.name(),begin,c.getTime(),count);
+			return jdbcTemplate.queryForList(sql,type.name(),begin,c.getTime(),count);
 		} catch (DataAccessException e) {
 			log.error(e, e);
 			return ListUtils.EMPTY_LIST;
@@ -208,7 +208,7 @@ public class AccountService {
 			Calendar c = Calendar.getInstance();
 			c.setTime(end);
 			c.add(Calendar.DAY_OF_MONTH, +1);
-			return jdbcTemplateUc.queryForList(sql,type.name(),begin,c.getTime(),count);
+			return jdbcTemplate.queryForList(sql,type.name(),begin,c.getTime(),count);
 		} catch (DataAccessException e) {
 			log.error(e, e);
 			return ListUtils.EMPTY_LIST;

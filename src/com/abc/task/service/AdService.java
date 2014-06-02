@@ -11,15 +11,15 @@ import org.springframework.stereotype.Service;
 @Service("adService")
 public class AdService {
 	@Resource
-	private JdbcTemplate jdbcTemplateUc;
+	private JdbcTemplate jdbcTemplate;
 
 	public Map<String, Object> getAdScript(int id) {
-		return jdbcTemplateUc.queryForMap(
+		return jdbcTemplate.queryForMap(
 				"select * from ad_script where id = ?", id);
 	}
 	
 	public List<Map<String, Object>> getAdContent(String group) {
-		return jdbcTemplateUc.queryForList(
+		return jdbcTemplate.queryForList(
 				"select * from ad_content where group = ?", group);
 	}
 }
